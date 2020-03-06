@@ -1,4 +1,4 @@
 {
-  "mongoURI" : "mongodb+srv://chloeleteinturier:chloeleteinturier@cluster0-qp2e6.mongodb.net/test?retryWrites=true&w=majority",
+  "mongoURI": "PUT_YOUR_MONGO_URI",
   "jwtSecret": "sl_myJwtSecret"
 }

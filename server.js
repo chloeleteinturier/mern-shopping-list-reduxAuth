@@ -1,11 +1,16 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const path = require("path");
-const config = require("config");
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const config = require('./config');
 
-const items = require("./routes/api/items");
-const users = require("./routes/api/users");
-const auth = require("./routes/api/auth");
+const items = require('./routes/api/items');
+const users = require('./routes/api/users');
+const auth = require('./routes/api/auth');
+
+require('dotenv').config();
+
+const { MONGODB_URI } = config;
+console.log('config', MONGODB_URI);
 
 const app = express();
 
@@ -14,8 +19,11 @@ app.use(express.json());
 
 // DB config
 // const db = process.env.MONGODB_URI;
-const db = config.get("mongoURI");
+// const db = config.get("mongoURI");
+const db = `${MONGODB_URI}`;
 
+console.log('db', db);
+console.log('process.env.MONGODB_URI', process.env.MONGODB_URI);
 //Connect to mongo
 mongoose
   .connect(db, {
@@ -23,21 +31,21 @@ mongoose
     useUnifiedTopology: true,
     useCreateIndex: true
   })
-  .then(() => console.log("MongoDB connected...."))
+  .then(() => console.log('MongoDB connected....'))
   .catch(err => console.log(err));
 
 //Use routes
-app.use("/api/items", items);
-app.use("/api/users", users);
-app.use("/api/auth", auth);
+app.use('/api/items', items);
+app.use('/api/users', users);
+app.use('/api/auth', auth);
 
 //Serve puplic assets if in production
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   //Set static folder
-  app.use(express.static("client/build"));
+  app.use(express.static('client/build'));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
 
